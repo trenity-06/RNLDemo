@@ -1,27 +1,33 @@
 import { Outlet } from "react-router-dom";
 import AppHeader from "./AppHeader";
 import AppSidebar from "./AppSidebar";
+import { SidebarProvider } from "../contexts/SidebarContext";
+import { HeaderProvider } from "../contexts/HeaderContext";
 
 const LayoutContent = () => {
-    return (
-        <>
-        <div>
-            <AppSidebar />
-        </div>
-        <div>
-            <AppHeader />
-        </div>
-        <div className="p-20 -mml-14 sm:ml-52">
-          <Outlet />
-        </div>
-        </>
-    );
+  return (
+    <>
+      <div>
+        <AppSidebar />
+      </div>
+      <div>
+        <AppHeader />
+      </div>
+      <div className="p-20 -mml-14 sm:ml-52">
+        <Outlet />
+      </div>
+    </>
+  );
 };
 
 const AppLayout = () => {
   return (
     <>
-    <LayoutContent />
+      <HeaderProvider>
+        <SidebarProvider>
+          <LayoutContent />
+        </SidebarProvider>
+      </HeaderProvider>
     </>
   );
 };

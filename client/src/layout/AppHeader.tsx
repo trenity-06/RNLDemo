@@ -1,6 +1,16 @@
+import { useSidebar } from "../contexts/SidebarContext";
+import { useHeader } from "../contexts/HeaderContext";
+import { Link } from 'react-router-dom';
+
 const AppHeader = () => {
+  const { isOpen, toggleUserMenu } = useHeader();
+  const { toggleSidebar } = useSidebar();
+
   return (
     <>
+    {isOpen && (
+        <div className="fixed inset z-40" onClick={toggleUserMenu}/>
+    )}
       <nav className="fixed top-0 z-50 w-full bg-neutral-primary-soft border-b border-default">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
@@ -10,6 +20,7 @@ const AppHeader = () => {
                 data-drawer-toggle="top-bar-sidebar"
                 aria-controls="top-bar-sidebar"
                 type="button"
+                onClick={toggleSidebar}
                 className="sm:hidden text-heading bg-transparent box-border border border-transparent hover:bg-neutral-secondary-medium focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded-base text-sm p-2 focus:outline-none"
               >
                 <span className="sr-only">Open sidebar</span>
@@ -46,6 +57,7 @@ const AppHeader = () => {
                 <div>
                   <button
                     type="button"
+                    onClick={toggleUserMenu}
                     className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                     aria-expanded="false"
                     data-dropdown-toggle="dropdown-user"
@@ -59,7 +71,7 @@ const AppHeader = () => {
                   </button>
                 </div>
                 <div
-                  className="z-50 hidden bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-44"
+                  className={`absolute right-8 top-9 min-w-50 z-50 ${isOpen ? "block" : "hidden"} my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-sm shadow-sm bg-neutral-primary-medium border border-default-medium rounded-base w-44`}
                   id="dropdown-user"
                 >
                   <div
@@ -75,40 +87,13 @@ const AppHeader = () => {
                   </div>
                   <ul className="p-2 text-sm text-body font-medium" role="none">
                     <li>
-                      <a
-                        href="#"
-                        className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
-                        role="menuitem"
-                      >
-                        Dashboard
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
-                        role="menuitem"
-                      >
-                        Settings
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
-                        role="menuitem"
-                      >
-                        Earnings
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
+                      <Link
+                        to="#"
                         className="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded"
                         role="menuitem"
                       >
                         Sign out
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -120,4 +105,5 @@ const AppHeader = () => {
     </>
   );
 };
+
 export default AppHeader;
