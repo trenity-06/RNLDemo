@@ -42,12 +42,7 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
           name={name}
           value={value}
           onChange={onChange}
-          className={`${
-            newInputClassName
-              ? newInputClassName
-              : `block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-base border border-default-medium border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer $
-            ${inputClassName}`
-          }`}
+          className={`${newInputClassName ? newInputClassName : `block px-2.5 pb-2.5 pt-4 w-full text-sm text-heading bg-transparent rounded-base border border-default-medium appearance-none focus:outline-none focus:ring-0 focus:border-brand peer ${inputClassName}`}`}
           placeholder=" "
           required={required}
           autoFocus={autoFocus}
@@ -56,14 +51,10 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
         />
         <label
           htmlFor={name}
-          className={`${
-            newLabelClassName
-              ? newLabelClassName
-              : `absolute text-sm text-gray-500 duration-300 transform-translate-y-4 scale-75 top-2 z-10 origin-left bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto inset s-1 ${labelClassName}`
-          }`}
+          className={`${newLabelClassName ? newLabelClassName : `absolute text-sm text-body duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-left bg-neutral-primary px-2 peer-focus:px-2 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto inset-s-1 ${labelClassName}`}`}
         >
           {label}
-          {required && <span className="text-red-600 ml-1 ">*</span>}
+          {required && <span className="text-red-600">*</span>}
         </label>
         {errors && errors.length > 0 && (
           <span className="text-red-600">{errors[0]}</span>
