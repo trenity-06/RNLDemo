@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tbl_genders', function (Blueprint $table) {
-            $table->id('gender_id');
-            $table->string('gender');
-            $table->tinyInteger('is_deleted')->default(false);
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('tbl_genders')) {
+            Schema::create('tbl_genders', function (Blueprint $table) {
+                $table->id('gender_id');
+                $table->string('gender');
+                $table->tinyInteger('is_deleted')->default(false);
+                $table->timestamps();
+            });
+        }
     }
 
     /**

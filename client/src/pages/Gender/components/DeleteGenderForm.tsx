@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react"
 import BackButton from "../../../components/Button/BackButton"
 import SubmitButton from "../../../components/Button/SubmitButton"
-import FloatingLabelInput from "../../../components/input/FloatingLabelInput"
+import FloatingLabelInput from "../../../components/Inputs/FloatingLabelInput"
 import { useNavigate, useParams } from "react-router-dom"
 import GenderService from "../../../services/GenderService"
 import Spinner from "../../../components/Spinner/Spinner"
