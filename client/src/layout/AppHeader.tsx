@@ -1,11 +1,10 @@
+import { Link } from 'react-router-dom';
 import { useSidebar } from "../contexts/SidebarContext";
 import { useHeader } from "../contexts/HeaderContext";
-import { Link } from 'react-router-dom';
 
 const AppHeader = () => {
   const { isOpen, toggleUserMenu } = useHeader();
-  const { toggleSidebar } = useSidebar();
-
+    const { toggleSidebar } = useSidebar();
   return (
     <>
     {isOpen && (

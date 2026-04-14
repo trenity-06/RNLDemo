@@ -1,14 +1,16 @@
+import type { FC } from 'react';
+
 interface SpinnerProps {
     size: 'xs' | 'sm' | 'md' | 'lg' 
 }
 
-const Spinner = FC<SpinnerProps> = ({ size }) => {
+const Spinner: FC<SpinnerProps> = ({ size }) => {
   return (
     <>
-    < div role="status" >
+    <div role="status" >
         <svg 
             aria-hidden="true" 
-            className={'inline ${
+            className={`inline ${
             size === "xs"
                 ? "w-4 h-4"
                 : size === "sm"
@@ -18,7 +20,7 @@ const Spinner = FC<SpinnerProps> = ({ size }) => {
                 : size === "lg"
                 ? "w-10 h-10"
                 : ""
-            } text-neutral-tertiary animate-spin fill-brand" 
+            } text-neutral-tertiary animate-spin fill-brand`} 
             viewBox="0 0 100 101" 
             fill="none" 
             xmlns="http://www.w3.org/2000/svg"
@@ -33,9 +35,9 @@ const Spinner = FC<SpinnerProps> = ({ size }) => {
             />
         </svg>
         <span className="sr-only">Loading...</span>
-        </div>
+    </div>
     </>
   )
 }
 
-export default Spinner
+export default Spinner;

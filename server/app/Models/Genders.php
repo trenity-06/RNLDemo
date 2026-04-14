@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifaiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 
-class Genders extends Model
+class Gender extends Model
 {
-    use HasFactory, Notifaiable;
+    use HasFactory, Notifiable;
 
     protected $table = 'tbl_genders';
     protected $primaryKey = 'gender_id';
