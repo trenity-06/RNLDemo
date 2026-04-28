@@ -2,7 +2,7 @@ import { useEffect, useState, type FC, type FormEvent } from "react"
 import BackButton from "../../../components/Button/BackButton"
 import SubmitButton from "../../../components/Button/SubmitButton"
 import FloatingLabelInput from "../../../components/Inputs/FloatingLabelInput"
-import type { GenderFieldErrors } from "../../../interfaces/GenderFieldErrors"
+import type { GenderFieldErrors } from "../../../interfaces/GenderInterface"
 import GenderService from "../../../services/GenderService"
 import { useParams } from "react-router-dom"
 import Spinner from "../../../components/Spinner/Spinner"
@@ -101,7 +101,7 @@ const EditGenderForm: FC<EditGenderFormProps> = ({ onGenderUpdated }) => {
 
                     <div className="flex justify-end gap-2">
                         {!loadingUpdate && (
-                            <BackButton label="Back" path="/">
+                            <BackButton label="Back" path="/genders">
                             </BackButton>
                         )}
                         <SubmitButton

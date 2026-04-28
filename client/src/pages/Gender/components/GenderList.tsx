@@ -6,7 +6,7 @@ import {
     TableCell,
     TableHeader,
     TableRow
-} from "../../../components/Table"
+} from "../../../components/table"
 import type { GenderColumns } from "../../../interfaces/GenderColumns"
 import GenderService from "../../../services/GenderService"
 import Spinner from "../../../components/Spinner/Spinner"
@@ -36,7 +36,7 @@ const GenderList: FC<GenderListProps> = ({ refreshKey }) => {
         } finally {
             setLoadingGenders(false);
         }
-    }
+    };
 
     useEffect(() => {
         handleLoadGenders()

@@ -4,11 +4,10 @@ import SubmitButton from "../../../components/Button/SubmitButton"
 import FloatingLabelInput from "../../../components/Inputs/FloatingLabelInput"
 import Modal from "../../../components/Modal"
 import FloatingLabelSelect from "../../../components/Select/FloatingLabelSelect"
-import type { userColumns } from "../../../interfaces/UserColumns"
-import type{ GenderColumns } from "../../../interfaces/GenderColumns"
-import type{ UserFieldErrors } from "../../../interfaces/UserFieldErrors"
 import GenderService from "../../../services/GenderService"
 import UserService from "../../../services/UserService";
+import type { userColumns, UserFieldErrors } from "../../../interfaces/UserInterface";
+import type { GenderColumns } from "../../../interfaces/GenderInterface";
 
 interface EditUserFormModalProps {
     user: userColumns | null
@@ -115,6 +114,7 @@ const EditUserFormModal: FC<EditUserFormModalProps> = ({
   }, [isOpen])
 
   useEffect(() => {
+    if (isOpen) {
     if (user) {
       setFirstName(user.first_name);
       setMiddleName(user.middle_name ?? '');
@@ -128,7 +128,8 @@ const EditUserFormModal: FC<EditUserFormModalProps> = ({
         user
       );
     }
-  }, [user]);
+  }
+  }, [isOpen, user]);
   return (
     <>
     <Modal isOpen={isOpen} onClose={onClose} showCloseButton>

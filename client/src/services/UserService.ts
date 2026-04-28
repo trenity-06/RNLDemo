@@ -1,4 +1,4 @@
-import AxiosInstance from "./Axiosinstance";
+import AxiosInstance from "./AxiosInstance";
 
 const UserService = {
   loadUsers: async () => {
@@ -24,6 +24,14 @@ const UserService = {
         `/user/updateUser/${userId}`, 
         data
       );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  destroyUser: async (userId: string | number) => {
+    try {
+      const response = await AxiosInstance.delete(`/user/destroyUser/${userId}`);
       return response;
     } catch (error) {
       throw error;

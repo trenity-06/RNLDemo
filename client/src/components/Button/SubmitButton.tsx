@@ -12,19 +12,18 @@ const SubmitButton: FC<SubmitButtonProps> = ({
     label,
     loading = false,
     loadingLabel = "Loading...",
-    className = "bg-blue-500 hover:bg-blue-700 text-white text-sm font-medium cursor-pointer py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+    className = "bg-linear-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white text-sm font-semibold cursor-pointer py-3 px-5 rounded-2xl shadow-lg shadow-cyan-200/40 transition duration-200 ease-in-out transform hover:-translate-y-0.5 active:scale-95 focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-offset-2"
 }) => {
     return (
         <button
             type="submit"
             disabled={loading}
-            className={`${className} ${loading ? 'disabled:opacity-50 disabled:cursor-not-allowed rounded-lg'
-                : ''}`}
+            className={`${className} ${loading ? 'disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100' : ''}`}
         >
             {loading ? (
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center gap-2">
                     <Spinner size="sm" />
-                    <span className="ml-2">{loadingLabel}</span>
+                    <span>{loadingLabel}</span>
                 </div>
             ) : (
                 label
