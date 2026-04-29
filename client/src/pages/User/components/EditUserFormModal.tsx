@@ -132,28 +132,28 @@ const EditUserFormModal: FC<EditUserFormModalProps> = ({
   }, [isOpen])
 
   useEffect(() => {
-    if (user) {
-      setEditUserProfilePicture(null);
+  if (!isOpen) return;
 
-      setExistingProfilePicture(
-        user.profile_picture ? user.profile_picture : null
-      )
+  handleLoadGenders();
+}, [isOpen]);
 
-      setFirstName(user.first_name);
-      setMiddleName(user.middle_name ?? '');
-      setLastName(user.last_name);
-      setSuffixName(user.suffix_name ?? '');
-      setGender(user.gender.gender_id.toString());
-      setBirthDate(user.birth_date);
-      setUsername(user.username);
-    } else {
-      console.error(
-        'Unexpected user error occured during getting user details: ',
-        user
-      );
-    }
-  }, [isOpen, user]);
+useEffect(() => {
+  if (!isOpen || !user) return;
 
+  setEditUserProfilePicture(null);
+
+  setExistingProfilePicture(
+    user.profile_picture ?? null
+  );
+
+  setFirstName(user.first_name);
+  setMiddleName(user.middle_name ?? "");
+  setLastName(user.last_name);
+  setSuffixName(user.suffix_name ?? "");
+  setGender(user.gender.gender_id.toString());
+  setBirthDate(user.birth_date);
+  setUsername(user.username);
+}, [isOpen, user]);
 
   return (
     <>
