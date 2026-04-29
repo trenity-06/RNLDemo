@@ -1,20 +1,22 @@
 import { useEffect, useState, type FC, type FormEvent } from "react";
-import CloseButton from "../../../components/Button/CloseButton"
-import SubmitButton from "../../../components/Button/SubmitButton"
-import FloatingLabelInput from "../../../components/Inputs/FloatingLabelInput"
-import Modal from "../../../components/Modal"
-import FloatingLabelSelect from "../../../components/Select/FloatingLabelSelect"
-import GenderService from "../../../services/GenderService"
+import CloseButton from "../../../components/Button/CloseButton";
+import SubmitButton from "../../../components/Button/SubmitButton";
+import FloatingLabelInput from "../../../components/Inputs/FloatingLabelInput";
+import Modal from "../../../components/Modal";
+import FloatingLabelSelect from "../../../components/Select/FloatingLabelSelect";
+import GenderService from "../../../services/GenderService";
 import UserService from "../../../services/UserService";
+import { useAuth } from "../../../contexts/AuthContext";
 import type { userColumns, UserFieldErrors } from "../../../interfaces/UserInterface";
 import type { GenderColumns } from "../../../interfaces/GenderInterface";
+import UploadInput from "../../../components/Inputs/UploadInput";
 
 interface EditUserFormModalProps {
-    user: userColumns | null
-    onUserUpdated: (message: string) => void
-    refreshKey: () => void
-    isOpen: boolean
-    onClose: () => void
+  user: userColumns | null;
+  onUserUpdated: (message: string) => void;
+  refreshKey: () => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 const EditUserFormModal: FC<EditUserFormModalProps> = ({
@@ -22,12 +24,15 @@ const EditUserFormModal: FC<EditUserFormModalProps> = ({
   onUserUpdated,
   refreshKey,
   isOpen,
-  onClose,
+  onClose
 }) => {
-  const [loadingGenders, setLoadingGenders] = useState(false)
-  const [genders, setGenders] = useState<GenderColumns[]>([])
+  const { refreshUser } = useAuth();
+  const [loadingGenders, setLoadingGenders] = useState(false);
+  const [genders, setGenders] = useState<GenderColumns[]>([]);
 
   const [loadingUpdate, setLoadingUpdate] = useState(false);
+  const [existingProfilePicture, setExistingProfilePicture] = useState<string | null>(null);
+  const [editUserProfilePicture, setEditUserProfilePicture] = useState<File | null>(null)
   const [firstName, setFirstName] = useState('');
   const [middleName, setMiddleName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -39,49 +44,62 @@ const EditUserFormModal: FC<EditUserFormModalProps> = ({
 
   const handleUpdateUser = async (e: FormEvent) => {
     try {
-      e.preventDefault()
+      e.preventDefault();
 
-      setLoadingUpdate(true)
+      setLoadingUpdate(true);
 
-      const payload = {
-        first_name: firstName,
-        middle_name: middleName,
-        last_name: lastName,
-        suffix_name: suffixName,
-        gender: gender,
-        birth_date: birthDate,
-        username: username,
-      };
+      const formData = new FormData()
+      formData.append('_method', 'PUT');
 
-      const res = await UserService.updateUser(user?.user_id!, payload)
+      if (editUserProfilePicture) {
+        formData.append('edit_user_profile_picture', editUserProfilePicture)
+      } else if (!existingProfilePicture) {
+        formData.append('remove_profile_picture', '1')
+      }
 
-       if (res.status === 200) {
-                setFirstName(res.data.user.first_name);
-                setMiddleName(res.data.user.middle_name ?? '');
-                setLastName(res.data.user.last_name);
-                setSuffixName(res.data.user.suffix_name ?? '');
-                setGender(res.data.user.gender_id);
-                setBirthDate(res.data.user.birth_date);
-                setUsername(res.data.user.username);
-                setErrors({});
+      formData.append('first_name', firstName);
+      formData.append('middle_name', middleName || "");
+      formData.append('last_name', lastName);
+      formData.append('suffix_name', suffixName || "")
+      formData.append('gender', gender);
+      formData.append('birth_date', birthDate);
+      formData.append('username', username)
 
-                onUserUpdated(res.data.message);
+      const res = await UserService.updateUser(user?.user_id!, formData)
 
-                handleLoadGenders();
-                refreshKey();
-            } else {
-                console.error('Unexpected status error occurred during user update: ', res.status);
-            }
+      if (res.status === 200) {
+        setExistingProfilePicture(
+          res.data.user.profile_picture ? res.data.user.profile_picture : null)
+        setEditUserProfilePicture(null);
+        setFirstName(res.data.user.first_name);
+        setMiddleName(res.data.user.middle_name ?? '');
+        setLastName(res.data.user.last_name);
+        setSuffixName(res.data.user.suffix_name ?? '');
+        setGender(res.data.user.gender_id);
+        setBirthDate(res.data.user.birth_date);
+        setUsername(res.data.user.username);
+        setErrors({});
+
+        onUserUpdated(res.data.message);
+        onClose();
+
+        await refreshUser();
+
+        handleLoadGenders();
+        refreshKey();
+      } else {
+        console.error('Unexpected status error occurred during user update: ', res.status);
+      }
     } catch (error: any) {
-            if (error.response && error.response.status === 422) {
-                setErrors(error.response.data.errors);
-            } else {
-                console.error('Unexpected server error occurred during user update: ', error);
-            }
-        } finally {
-            setLoadingUpdate(false);
-        }    
+      if (error.response && error.response.status === 422) {
+        setErrors(error.response.data.errors);
+      } else {
+        console.error('Unexpected server error occurred during user update: ', error);
+      }
+    } finally {
+      setLoadingUpdate(false);
     }
+  }
 
   const handleLoadGenders = async () => {
     try {
@@ -93,13 +111,13 @@ const EditUserFormModal: FC<EditUserFormModalProps> = ({
         setGenders(res.data.genders)
       } else {
         console.error(
-          "Unexpected status error occured during loading genders: ", 
+          "Unexpected status error occured during loading genders: ",
           res.status
         );
       }
     } catch (error) {
       console.error(
-        "Unexpected server error occured during loading genders: ", 
+        "Unexpected server error occured during loading genders: ",
         error
       );
     } finally {
@@ -114,8 +132,13 @@ const EditUserFormModal: FC<EditUserFormModalProps> = ({
   }, [isOpen])
 
   useEffect(() => {
-    if (isOpen) {
     if (user) {
+      setEditUserProfilePicture(null);
+
+      setExistingProfilePicture(
+        user.profile_picture ? user.profile_picture : null
+      )
+
       setFirstName(user.first_name);
       setMiddleName(user.middle_name ?? '');
       setLastName(user.last_name);
@@ -124,20 +147,31 @@ const EditUserFormModal: FC<EditUserFormModalProps> = ({
       setBirthDate(user.birth_date);
       setUsername(user.username);
     } else {
-      console.error('Unexpected user error occured during getting user details', 
+      console.error(
+        'Unexpected user error occured during getting user details: ',
         user
       );
     }
-  }
   }, [isOpen, user]);
+
+
   return (
     <>
-    <Modal isOpen={isOpen} onClose={onClose} showCloseButton>
+      <Modal isOpen={isOpen} onClose={onClose} showCloseButton>
         <form onSubmit={handleUpdateUser}>
           <h1 className="text-2xl font-bold mb-4">
             Edit User Form
           </h1>
-          <div className="grid grid-cols-2 gap-4 border-b norder-gray-100 mb-4">
+          <UploadInput
+            label="Profile Picture"
+            name="edit_user_profile_picture"
+            value={editUserProfilePicture}
+            onChange={setEditUserProfilePicture}
+            onRemoveExistingImageUrl={() => setExistingProfilePicture(null)}
+            existingImageUrl={existingProfilePicture}
+            errors={errors.edit_user_profile_picture}
+          />
+          <div className="grid grid-cols-2 gap-4 border-b border-gray-100 mb-4">
             <div className="col-span-2 md:col-span-1">
               <div className="mb-4">
                 <FloatingLabelInput
@@ -234,14 +268,12 @@ const EditUserFormModal: FC<EditUserFormModalProps> = ({
               <CloseButton label="Close" onClose={onClose} />
             )}
 
-            <SubmitButton 
-            label="Update User" 
-            loading={loadingUpdate} 
-            loadingLabel="Updating User..." />
+            <SubmitButton label="Updating User" loading={loadingUpdate} loadingLabel="Saving User" />
           </div>
         </form>
-      </Modal>    </>
-  )
+      </Modal>
+    </>
+  );
 }
 
-export default EditUserFormModal
+export default EditUserFormModal;

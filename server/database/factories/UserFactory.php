@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Gender;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -24,12 +25,19 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $birthdate = fake()->date();
+        $age = date_diff(date_create($birthdate), date_create('today'))->y;
+
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'first_name' => fake()->firstName(),
+            'middle_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
+            'suffix_name' => fake()->suffix(),
+            'gender_id' => Gender::inRandomOrder()->first()->gender_id,
+            'birth_date' => $birthdate,
+            'age' => $age,
+            'username' => strtolower(fake()->firstName() . fake()->lastName()),
+            'password' => 'sample123'
         ];
     }
 

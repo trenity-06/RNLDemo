@@ -24,6 +24,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'profile_picture',
         'first_name',
         'middle_name',
         'last_name',
@@ -46,16 +47,13 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'password' => 'hashed',
+    ];
 
     public function gender(): BelongsTo
     {
