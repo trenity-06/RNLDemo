@@ -1,10 +1,14 @@
-import AxiosInstance from "./AxiosInstance";
+import AxiosInstance from "./Axiosinstance";
 
 const UserService = {
-  loadUsers: async () => {
+  loadUsers: async (page: number, search: string) => {
     try {
-      const response = await AxiosInstance.get('/user/loadUsers')
-      return response
+      const response = await AxiosInstance.get(
+        search 
+          ? `/user/loadUsers?page=${page}&search=${search}`
+          : `/user/loadUsers?page=${page}`
+      );
+      return response;
     } catch (error) {
       throw error;
     }
@@ -27,11 +31,11 @@ const UserService = {
       return response;
     } catch (error) {
       throw error;
-    }
+    } 
   },
   destroyUser: async (userId: string | number) => {
     try {
-      const response = await AxiosInstance.delete(`/user/destroyUser/${userId}`);
+      const response = await AxiosInstance.put(`/user/destroyUser/${userId}`);
       return response;
     } catch (error) {
       throw error;
