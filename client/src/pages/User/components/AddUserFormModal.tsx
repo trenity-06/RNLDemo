@@ -46,11 +46,8 @@ const AddUserFormModal: FC<AddUserFormModalProps> = ({
 
       setloadingStore(true);
 
-      const formData = new FormData()
-
-      if (addUserProfilePicture) {
-        formData.append('add_user_profile_picture', addUserProfilePicture)
-      }
+      const formData = new FormData();
+      formData.append('add_user_profile_picture', addUserProfilePicture || '')
 
       formData.append('first_name', firstName);
       formData.append('middle_name', middleName || "");
